@@ -1,14 +1,54 @@
 // ==UserScript==
 // @name         EasyViewer Cards ehancer
-// @namespace    http://wikipao.net
-// @version      0.1
-// @description  Easyviewer Mod for Cards
-// @author       Lukenga Victor
-// @match        http://127.0.0.1:51089/
+// @namespace    http://tampermonkey.net/
+// @version      0.1.1
+// @description  try to take over the world!
+// @author       Victor Lukenga
+// @include  /(http:\/\/)(([a-z])|([\d.]))+:510[0-9]{2}\//
 // @grant        none
 // ==/UserScript==
 
 setTimeout(function(){
+
+
+    var settings1 = {
+        "async": true,
+        "crossDomain": true,
+        "url": "http://127.0.0.1:51088/api/v1/jobs?filter=%7B%22and%22%3A%5B%7B%22name%22%3A%7B%22contains%22%3A%223%22%7D%7D%5D%7D&fields=checkpointName,status",
+        "method": "GET",
+        "headers": {
+            "Authorization": "Bearer d7ca14cf3a1d979064b830dbf4bb9cb9c2123c5e",
+            "Cache-Control": "no-cache",
+            "Postman-Token": "0ceb426e-0f23-74ab-3d77-1234496542ab"
+        }
+    };
+    var source1 = $('#listFilter li #filterBox');
+    var matchArr = ['OFFSET','NGF','test'];
+
+    function macaron(thaFilter,thaSource,thaMatch){
+        $.ajax(thaFilter).done(function (response) {
+            console.log(response.data.length);
+            thaSource.each( function(){
+                var myfilter =$(this).text();
+                var match = myfilter.match(/offset|ngf|test/gi);
+                if (match == thaMatch){
+                    $(this).append( "<p class ='counter'>"+response.data.length+"</p>" );
+                }
+            });
+        });
+    }
+    macaron(settings1,source1,matchArr[0]);
+    macaron(settings1,source1,matchArr[2]);
+
+
+
+    //----------------------------------
+
+    $('.countOfAlertJobs').bind("DOMSubtreeModified",function(){
+        console.log("changed");
+        macaron(settings1,source1,matchArr[0]);
+        macaron(settings1,source1,matchArr[2]);
+    });
 
     $( '.boxJobs' ).scroll(function() {
         colorCondition();
@@ -43,25 +83,22 @@ setTimeout(function(){
 
         if(heightValue>=0 ){
             colorcard();//console.log("execution");
+
         }
     }
+
+    $(".noMetadataText").css("color","red");
 
     $('.nameJob p').each(function(){
         colorCondition();
     });
 
+
+    $(".button_process_job").click(function(){
+
+        $('body').bind("DOMSubtreeModified",function(){
+            $(".modal-body").css("background-color","red","important");
+        });
+    });
+
 }, 2000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
