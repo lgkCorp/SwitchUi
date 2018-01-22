@@ -87,7 +87,7 @@ setTimeout(function(){
         }
     }
 
-    $(".noMetadataText").css("color","red");
+    $(".noMetadataText").css("color","white");
 
     $('.nameJob p').each(function(){
         colorCondition();
